@@ -10,7 +10,7 @@ setup(
     author="jattenberg",
     author_email="josh@attenberg.org",
     url="https://github.com/jattenberg/sksofia",
-    download_url='https://github.com/jattenberg/sksofia/archive/v_010.tar.gz',
+    download_url='https://github.com/jattenberg/sksofia/archive/v0.1.0.tar.gz',
     license="MIT",
     packages=['sksofia'],
     zip_safe=False,
