@@ -5,10 +5,13 @@
 The original library is in very highly optimized c++ and is extremely fast. This package provides a [scikit-learn classifier interface](https://scikit-learn.org/stable/modules/generated/sklearn.base.ClassifierMixin.html#sklearn.base.ClassifierMixin) to this excellent library. This functionality primarily works by writing  the sklearn numpy array inputs into temp files in the format that `sofia-ml` model consume. With `sofia-ml`,  trained, a model is written to disk, whereby this library slurps up the binary version which is stored internally as bytes. This allows for compatibility with normal python serialization. When subsequent classification is needed, this model representaton is written back out to a temp file. 
 
 Usage:
+------
 
 The script includes a shell script (`build.sh`) that can be used to install the library into a virtualenv as well as compile the requisite `sofia-ml` binary and place it in `~/bin`. This script can be modified to suit your needs and how you will use the library. Currently, there is a version of this library in pypi, but installing via pip doesn't provide the `sofia-ml` binary which needs to be on the `$PATH`. The C++ code for `sofia-ml` is included, look at `build.sh` for pointers on how to build it.
 
 
 Todo:
-- put on pypi
+-----
+- build with nix
+- figure how to build and install `sofia-ml` with pip
 - documenting usage, docstrings
