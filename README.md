@@ -6,6 +6,8 @@ The original library is in very highly optimized c++ and is extremely fast. This
 
 Usage:
 
+The script includes a shell script (`build.sh`) that can be used to install the library into a virtualenv as well as compile the requisite `sofia-ml` binary and place it in `~/bin`. This script can be modified to suit your needs and how you will use the library. Currently, there is a version of this library in pypi, but installing via pip doesn't provide the `sofia-ml` binary which needs to be on the `$PATH`. The C++ code for `sofia-ml` is included, look at `build.sh` for pointers on how to build it.
+
 
 Todo:
 - put on pypi
