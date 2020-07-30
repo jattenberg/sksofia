@@ -6,6 +6,7 @@ from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from tempfile import NamedTemporaryFile
 from subprocess import call
 from sklearn.datasets import dump_svmlight_file
+from sklearn.metrics import accuracy_score
 from enum import Enum
 
 
@@ -253,6 +254,10 @@ class SKSofia(BaseEstimator, ClassifierMixin):
     def decision_function(self, X, y=None):
         return self._predict(X, y)
 
+    def score(self, X, y, sample_weight=None):
+        y_preds = self.predict(X)
+        return accuracy_score(y, y_preds, normalized=True)
+    
 def main():
     from sklearn.datasets import load_iris, fetch_20newsgroups_vectorized
     from sklearn.model_selection import StratifiedKFold
@@ -290,6 +295,6 @@ def main():
     for loop, aucs in sorted(methods.items(), key=lambda x: x[1]):
         print("%s AUC: %0.4f" % (loop, aucs))
 
-
+        
 if __name__ == "__main__":
     main()
