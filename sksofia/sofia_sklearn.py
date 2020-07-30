@@ -56,7 +56,90 @@ def safe_sigmoid(x):
         return z / (1.0 + z)
 
 
+def get_argument_string():
+    arguments = [
+        [
+            "learner_type",
+            "which linear model, loss function and optimization to use",
+            ", ".join([e.value for e in LearnerType]),
+            "logreg-pegasos"
+        ],
+        [
+            "loop_type",
+            "how to sample examples when training",
+            ", ".join([e.value for e in LoopType]),
+            "combined-roc"
+        ],
+        [
+            "eta_type",
+            "type of update for learning rate",
+            ", ".join([e.value for e in EtaType]),
+            "pegasos"
+        ],
+        [
+            "lambda_reg",
+            "value of lambda used for SVM regularization (for pegasos and sgd-svm)",
+            "float >= 0",
+            "0.1"
+        ],
+        [
+            "passive_aggressive_c",
+            "max step size for a single update with passive_aggressive algorithm",
+            "float > 0",
+            "0.1"
+        ],
+        [
+            "passive_aggressive_lambda",
+            "lambda for pegasos projection with passive_aggressive algorithm update",
+            "float >= 0",
+            "0 (no projection)"
+        ],
+        [
+            "perceptron_margin_size",
+            "width of margin for for peceptron with margins 1 is unregularized svm loss",
+            "float",
+            "1"
+        ],
+        [
+            "iterations",
+            "number of sgd steps to take",
+            "int > 0",
+            "100000",
+        ],
+        [
+            "dimensionality",
+            "the largest feature index + 1; max dimensionality of the model",
+            "int > 0",
+            "2^18"
+        ],
+    ]
+
+    arg_labels = [
+        "name: ",
+        "description: ",
+        "type: ",
+        "default: "
+    ]
+
+    def arg_formatter(arg_info):
+        zipped = zip(arg_labels, arg_info)
+        return "\n".join(["%s %s" % (z[0], z[1]) for z in zipped])
+
+    return "\n\n\n".join([arg_formatter(arg) for arg in arguments])
+            
 class SKSofia(BaseEstimator, ClassifierMixin):
+    """
+      a scikit-learn classifier wrapper for d. sculley's sofia-ml c++ library.
+      supports all the options of sofia-ml and is compatible with any kind of
+      python serialization. 
+
+      see sofia-ml documentation for more information on the particular options
+      `sofia-ml --help` or https://code.google.com/archive/p/sofia-ml/
+
+      arguments: 
+      %s
+    """ % get_argument_string()
+    
     def __init__(
         self,
         learner_type="logreg-pegasos",
@@ -70,6 +153,11 @@ class SKSofia(BaseEstimator, ClassifierMixin):
         dimensionality=2 ** 18,
         perceptron_margin_size=1,
     ):
+        """
+          initialize a sksofia classifier
+          arguments:
+          %s
+        """ % get_argument_string()
 
         self.learner_type = learner_type
         self.loop_type = loop_type
@@ -164,7 +252,6 @@ class SKSofia(BaseEstimator, ClassifierMixin):
 
     def decision_function(self, X, y=None):
         return self._predict(X, y)
-
 
 def main():
     from sklearn.datasets import load_iris, fetch_20newsgroups_vectorized
