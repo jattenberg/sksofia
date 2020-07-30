@@ -5,12 +5,12 @@ required_libraries = ["numpy", "scikit-learn", "jupyter", "pandas"]
 
 setup(
     name="sksofia",
-    version="0.1.0",
+    version="0.1.1",
     description="a scikit learn wrapper for sofiaml",
     author="jattenberg",
     author_email="josh@attenberg.org",
     url="https://github.com/jattenberg/sksofia",
-    download_url='https://github.com/jattenberg/sksofia/archive/v0.1.0.tar.gz',
+    download_url='https://github.com/jattenberg/sksofia/archive/v0.1.1.tar.gz',
     license="MIT",
     packages=['sksofia'],
     zip_safe=False,
