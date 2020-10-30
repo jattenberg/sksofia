@@ -37,7 +37,7 @@ class EtaType(Enum):
 
 def sofia_writer(X, y, file):
     def _add_ending_space(file):
-        with open(file, 'r') as source:
+        with open(file, "r") as source:
             lines = [line.replace("\n", " \n") for line in source.readlines()]
         with open(file, "w") as target:
             target.writelines(lines)
@@ -63,71 +63,62 @@ def get_argument_string():
             "learner_type",
             "which linear model, loss function and optimization to use",
             ", ".join([e.value for e in LearnerType]),
-            "logreg-pegasos"
+            "logreg-pegasos",
         ],
         [
             "loop_type",
             "how to sample examples when training",
             ", ".join([e.value for e in LoopType]),
-            "combined-roc"
+            "combined-roc",
         ],
         [
             "eta_type",
             "type of update for learning rate",
             ", ".join([e.value for e in EtaType]),
-            "pegasos"
+            "pegasos",
         ],
         [
             "lambda_reg",
             "value of lambda used for SVM regularization (for pegasos and sgd-svm)",
             "float >= 0",
-            "0.1"
+            "0.1",
         ],
         [
             "passive_aggressive_c",
             "max step size for a single update with passive_aggressive algorithm",
             "float > 0",
-            "0.1"
+            "0.1",
         ],
         [
             "passive_aggressive_lambda",
             "lambda for pegasos projection with passive_aggressive algorithm update",
             "float >= 0",
-            "0 (no projection)"
+            "0 (no projection)",
         ],
         [
             "perceptron_margin_size",
             "width of margin for for peceptron with margins 1 is unregularized svm loss",
             "float",
-            "1"
+            "1",
         ],
-        [
-            "iterations",
-            "number of sgd steps to take",
-            "int > 0",
-            "100000",
-        ],
+        ["iterations", "number of sgd steps to take", "int > 0", "100000",],
         [
             "dimensionality",
             "the largest feature index + 1; max dimensionality of the model",
             "int > 0",
-            "2^18"
+            "2^18",
         ],
     ]
 
-    arg_labels = [
-        "name: ",
-        "description: ",
-        "type: ",
-        "default: "
-    ]
+    arg_labels = ["name: ", "description: ", "type: ", "default: "]
 
     def arg_formatter(arg_info):
         zipped = zip(arg_labels, arg_info)
         return "\n".join(["%s %s" % (z[0], z[1]) for z in zipped])
 
     return "\n\n\n".join([arg_formatter(arg) for arg in arguments])
-            
+
+
 class SKSofia(BaseEstimator, ClassifierMixin):
     """
       a scikit-learn classifier wrapper for d. sculley's sofia-ml c++ library.
@@ -140,7 +131,7 @@ class SKSofia(BaseEstimator, ClassifierMixin):
       arguments: 
       %s
     """ % get_argument_string()
-    
+
     def __init__(
         self,
         learner_type="logreg-pegasos",
@@ -200,10 +191,12 @@ class SKSofia(BaseEstimator, ClassifierMixin):
             sofia_writer(X, y, training_file.name)
 
             with NamedTemporaryFile() as model_file:
-                training_command = self._build_train_command(training_file.name, model_file.name)
+                training_command = self._build_train_command(
+                    training_file.name, model_file.name
+                )
                 call(training_command, shell=True)
 
-                with open(model_file.name, mode='rb') as file:
+                with open(model_file.name, mode="rb") as file:
                     self.model_params = file.read()
 
         return self
@@ -236,7 +229,9 @@ class SKSofia(BaseEstimator, ClassifierMixin):
                     )
                     call(predict_command, shell=True)
 
-                    pred_prob = pd.read_csv(results_file.name, sep="\t", names=["pred", "true"])
+                    pred_prob = pd.read_csv(
+                        results_file.name, sep="\t", names=["pred", "true"]
+                    )
                     logging.debug(pred_prob)
 
                     return np.nan_to_num(
@@ -257,7 +252,8 @@ class SKSofia(BaseEstimator, ClassifierMixin):
     def score(self, X, y, sample_weight=None):
         y_preds = self.predict(X)
         return accuracy_score(y, y_preds, normalized=True)
-    
+
+
 def main():
     from sklearn.datasets import load_iris, fetch_20newsgroups_vectorized
     from sklearn.model_selection import StratifiedKFold
@@ -295,6 +291,6 @@ def main():
     for loop, aucs in sorted(methods.items(), key=lambda x: x[1]):
         print("%s AUC: %0.4f" % (loop, aucs))
 
-        
+
 if __name__ == "__main__":
     main()
