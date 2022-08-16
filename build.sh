@@ -11,8 +11,5 @@ venv="venv"
 
 echo "making $venv"
 
-virtualenv $venv
-source $venv/bin/activate
-
 echo "installing sksofia"
-pip install -e .
+$venv/bin/pip install -e .
